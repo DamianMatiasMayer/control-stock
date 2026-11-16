@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar egreso</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <h1>Registrar egreso</h1>
+
+    <p>
+        <strong th:text="${existencia.producto.nombre}">Yerba 1 kg</strong>
+        en <strong th:text="${existencia.deposito.nombre}">Central</strong>.
+        Disponible: <span th:text="${existencia.cantidad}">20</span>
+        (mínimo: <span th:text="${existencia.stockMinimo}">5</span>)
+    </p>
+
+    <p class="mensaje-error" th:if="${error}" th:text="${error}">Stock insuficiente</p>
+
+    <form th:action="@{/egresos}" th:object="${movimientoForm}" method="post">
+        <input type="hidden" th:field="*{existenciaId}">
+
+        <div class="campo">
+            <label for="cantidad">Cantidad</label>
+            <input type="number" id="cantidad" th:field="*{cantidad}" min="1">
+            <span class="error-campo" th:if="${#fields.hasErrors('cantidad')}" th:errors="*{cantidad}">Error</span>
+        </div>
+
+        <div class="campo">
+            <label for="motivo">Motivo</label>
+            <input type="text" id="motivo" th:field="*{motivo}" maxlength="200">
+            <span class="error-campo" th:if="${#fields.hasErrors('motivo')}" th:errors="*{motivo}">Error</span>
+        </div>
+
+        <button type="submit">Registrar egreso</button>
+        <a th:href="@{/stock}">Cancelar</a>
+    </form>
+</body>
+</html>

@@ -30,6 +30,14 @@ public class InventarioService {
         return existenciaRepository.findAllByOrderByDepositoNombreAscProductoNombreAsc();
     }
 
+        public Existencia buscarExistencia(Long existenciaId) {
+        Existencia existencia = existenciaRepository.findById(existenciaId).orElse(null);
+        if (existencia == null) {
+            throw new IllegalArgumentException("El stock seleccionado no existe");
+        }
+        return existencia;
+    }
+
     @Transactional
     public MovimientoStock registrarEgreso(Long existenciaId, int cantidad, String motivo) {
         // RN3: la cantidad debe ser mayor a 0
@@ -37,10 +45,7 @@ public class InventarioService {
             throw new IllegalArgumentException("La cantidad debe ser mayor a 0");
         }
 
-        Existencia existencia = existenciaRepository.findById(existenciaId).orElse(null);
-        if (existencia == null) {
-            throw new IllegalArgumentException("El stock seleccionado no existe");
-        }
+        Existencia existencia = buscarExistencia(existenciaId);
 
         // RN1: no se puede sacar más de lo que hay en el depósito
         if (cantidad > existencia.getCantidad()) {
