@@ -26,6 +26,10 @@ public class InventarioService {
         this.observadores = observadores;
     }
 
+        public List<Existencia> listarExistencias() {
+        return existenciaRepository.findAllByOrderByDepositoNombreAscProductoNombreAsc();
+    }
+
     @Transactional
     public MovimientoStock registrarEgreso(Long existenciaId, int cantidad, String motivo) {
         // RN3: la cantidad debe ser mayor a 0

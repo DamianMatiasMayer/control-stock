@@ -1,0 +1,29 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 2rem;
+    color: #222;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    text-align: left;
+}
+
+th {
+    background-color: #f0f0f0;
+}
+
+.stock-bajo {
+    background-color: #ffe0e0;
+}
+
+.referencia {
+    font-size: 0.9rem;
+    color: #666;
+}

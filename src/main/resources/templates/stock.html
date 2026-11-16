@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock por depósito</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <h1>Stock por depósito</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Depósito</th>
+                <th>Código</th>
+                <th>Producto</th>
+                <th>Categoría</th>
+                <th>Cantidad</th>
+                <th>Mínimo</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="existencia : ${existencias}"
+                th:classappend="${existencia.cantidad <= existencia.stockMinimo} ? 'stock-bajo'">
+                <td th:text="${existencia.deposito.nombre}">Central</td>
+                <td th:text="${existencia.producto.codigo}">ALM-001</td>
+                <td th:text="${existencia.producto.nombre}">Yerba 1 kg</td>
+                <td th:text="${existencia.producto.categoria.nombre}">Almacén</td>
+                <td th:text="${existencia.cantidad}">20</td>
+                <td th:text="${existencia.stockMinimo}">5</td>
+                <td>
+                    <a th:href="@{/egresos/nuevo(existenciaId=${existencia.id})}">Registrar egreso</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p class="referencia">Las filas resaltadas están en el stock mínimo o por debajo.</p>
+</body>
+</html>
