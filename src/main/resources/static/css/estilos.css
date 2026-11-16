@@ -48,3 +48,14 @@ th {
     color: #c00;
     font-size: 0.9rem;
 }
+
+.mensaje-alerta {
+    background-color: #fff4d6;
+    border: 1px solid #d9a400;
+    padding: 0.75rem;
+    margin-top: 1rem;
+}
+
+.detalle {
+    width: auto;
+}

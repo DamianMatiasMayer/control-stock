@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Movimiento registrado</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <h1>Movimiento registrado</h1>
+
+    <table class="detalle">
+        <tr>
+            <th>Número</th>
+            <td th:text="${movimiento.id}">1</td>
+        </tr>
+        <tr>
+            <th>Fecha</th>
+            <td th:text="${#temporals.format(movimiento.fecha, 'dd/MM/yyyy HH:mm')}">16/11/2026 08:54</td>
+        </tr>
+        <tr>
+            <th>Tipo</th>
+            <td th:text="${movimiento.tipo}">EGRESO</td>
+        </tr>
+        <tr>
+            <th>Producto</th>
+            <td th:text="${movimiento.existencia.producto.nombre}">Yerba 1 kg</td>
+        </tr>
+        <tr>
+            <th>Depósito</th>
+            <td th:text="${movimiento.existencia.deposito.nombre}">Sucursal Norte</td>
+        </tr>
+        <tr>
+            <th>Cantidad</th>
+            <td th:text="${movimiento.cantidad}">3</td>
+        </tr>
+        <tr>
+            <th>Motivo</th>
+            <td th:text="${movimiento.motivo}">Venta</td>
+        </tr>
+        <tr>
+            <th>Stock actual</th>
+            <td th:text="${movimiento.existencia.cantidad}">3</td>
+        </tr>
+    </table>
+
+    <div class="mensaje-alerta" th:if="${alerta != null}">
+        <strong>Alerta de stock bajo:</strong>
+        quedaron <span th:text="${alerta.stockAlMomento}">3</span> unidades
+        (mínimo: <span th:text="${movimiento.existencia.stockMinimo}">3</span>).
+        Hay que reponer.
+    </div>
+
+    <p><a th:href="@{/stock}">Volver al stock</a></p>
+</body>
+</html>
