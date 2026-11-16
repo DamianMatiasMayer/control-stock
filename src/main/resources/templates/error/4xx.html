@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>No encontrado</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <h1>No encontramos lo que buscás</h1>
+
+    <p class="mensaje-error" th:text="${mensaje != null} ? ${mensaje} : 'La página o el dato solicitado no existe.'">
+        La página o el dato solicitado no existe.
+    </p>
+
+    <p><a th:href="@{/stock}">Volver al stock</a></p>
+</body>
+</html>

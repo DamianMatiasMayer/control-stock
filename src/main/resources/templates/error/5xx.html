@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <h1>Ocurrió un error inesperado</h1>
+
+    <p class="mensaje-error">No pudimos completar la operación. Intentá de nuevo en unos minutos.</p>
+
+    <p><a th:href="@{/stock}">Volver al stock</a></p>
+</body>
+</html>

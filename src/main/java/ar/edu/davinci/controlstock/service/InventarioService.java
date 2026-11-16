@@ -38,7 +38,7 @@ public class InventarioService {
     public Existencia buscarExistencia(Long existenciaId) {
         Existencia existencia = existenciaRepository.findById(existenciaId).orElse(null);
         if (existencia == null) {
-            throw new IllegalArgumentException("El stock seleccionado no existe");
+            throw new DatoNoEncontradoException("El stock seleccionado no existe");
         }
         return existencia;
     }
@@ -46,7 +46,7 @@ public class InventarioService {
     public MovimientoStock buscarMovimiento(Long movimientoId) {
         MovimientoStock movimiento = movimientoStockRepository.findById(movimientoId).orElse(null);
         if (movimiento == null) {
-            throw new IllegalArgumentException("El movimiento no existe");
+            throw new DatoNoEncontradoException("El movimiento no existe");
         }
         return movimiento;
     }
