@@ -22,7 +22,7 @@ import ar.edu.davinci.controlstock.repository.ExistenciaRepository;
 import ar.edu.davinci.controlstock.repository.MovimientoStockRepository;
 import ar.edu.davinci.controlstock.repository.ProductoRepository;
 
-@SpringBootTest
+@SpringBootTest(properties = "spring.sql.init.mode=never")
 @Transactional
 class InventarioServiceTest {
 
