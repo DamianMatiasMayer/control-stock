@@ -59,3 +59,21 @@ th {
 .detalle {
     width: auto;
 }
+
+.filtros {
+    margin-bottom: 1rem;
+}
+
+.filtros label {
+    margin-right: 0.25rem;
+}
+
+.filtros select,
+.filtros input[type="text"] {
+    margin-right: 1rem;
+}
+
+.paginacion a,
+.paginacion span {
+    margin-right: 1rem;
+}

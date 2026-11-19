@@ -2,14 +2,18 @@ package ar.edu.davinci.controlstock.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.davinci.controlstock.entity.AlertaStock;
+import ar.edu.davinci.controlstock.entity.Deposito;
 import ar.edu.davinci.controlstock.entity.Existencia;
 import ar.edu.davinci.controlstock.entity.MovimientoStock;
 import ar.edu.davinci.controlstock.entity.TipoMovimiento;
 import ar.edu.davinci.controlstock.repository.AlertaStockRepository;
+import ar.edu.davinci.controlstock.repository.DepositoRepository;
 import ar.edu.davinci.controlstock.repository.ExistenciaRepository;
 import ar.edu.davinci.controlstock.repository.MovimientoStockRepository;
 
@@ -19,20 +23,38 @@ public class InventarioService {
     private final ExistenciaRepository existenciaRepository;
     private final MovimientoStockRepository movimientoStockRepository;
     private final AlertaStockRepository alertaStockRepository;
+    private final DepositoRepository depositoRepository;
     private final List<ObservadorStock> observadores;
 
     public InventarioService(ExistenciaRepository existenciaRepository,
                              MovimientoStockRepository movimientoStockRepository,
                              AlertaStockRepository alertaStockRepository,
+                             DepositoRepository depositoRepository,
                              List<ObservadorStock> observadores) {
         this.existenciaRepository = existenciaRepository;
         this.movimientoStockRepository = movimientoStockRepository;
         this.alertaStockRepository = alertaStockRepository;
+        this.depositoRepository = depositoRepository;
         this.observadores = observadores;
     }
 
-    public List<Existencia> listarExistencias() {
-        return existenciaRepository.findAllByOrderByDepositoNombreAscProductoNombreAsc();
+    public Page<Existencia> listarExistencias(Long depositoId, String texto, boolean soloStockBajo, Pageable pageable) {
+        // Un texto vacío equivale a no filtrar por texto
+        if (texto != null && texto.isBlank()) {
+            texto = null;
+        }
+        Page<Existencia> resultado = existenciaRepository.buscar(depositoId, texto, soloStockBajo, pageable);
+
+        // Si se pide una página que no existe (por ejemplo, la 99), se muestra la última
+        if (pageable.getPageNumber() >= resultado.getTotalPages() && resultado.getTotalPages() > 0) {
+            resultado = existenciaRepository.buscar(depositoId, texto, soloStockBajo,
+                    pageable.withPage(resultado.getTotalPages() - 1));
+        }
+        return resultado;
+    }
+
+    public List<Deposito> listarDepositos() {
+        return depositoRepository.findAllByOrderByNombreAsc();
     }
 
     public Existencia buscarExistencia(Long existenciaId) {

@@ -8,6 +8,28 @@
 <body>
     <h1>Stock por depósito</h1>
 
+    <form class="filtros" th:action="@{/stock}" method="get">
+        <label for="depositoId">Depósito</label>
+        <select id="depositoId" name="depositoId">
+            <option value="">Todos</option>
+            <option th:each="deposito : ${depositos}"
+                    th:value="${deposito.id}"
+                    th:text="${deposito.nombre}"
+                    th:selected="${deposito.id == depositoId}">Central</option>
+        </select>
+
+        <label for="texto">Producto</label>
+        <input type="text" id="texto" name="texto" th:value="${texto}" placeholder="Código o nombre">
+
+        <label>
+            <input type="checkbox" name="soloStockBajo" value="true" th:checked="${soloStockBajo}">
+            Solo stock bajo
+        </label>
+
+        <button type="submit">Filtrar</button>
+        <a th:href="@{/stock}">Limpiar</a>
+    </form>
+
     <table>
         <thead>
             <tr>
@@ -21,7 +43,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="existencia : ${existencias}"
+            <tr th:each="existencia : ${pagina.content}"
                 th:classappend="${existencia.cantidad <= existencia.stockMinimo} ? 'stock-bajo'">
                 <td th:text="${existencia.deposito.nombre}">Central</td>
                 <td th:text="${existencia.producto.codigo}">ALM-001</td>
@@ -33,9 +55,23 @@
                     <a th:href="@{/egresos/nuevo(existenciaId=${existencia.id})}">Registrar egreso</a>
                 </td>
             </tr>
+            <tr th:if="${pagina.empty}">
+                <td colspan="7">No hay productos que coincidan con el filtro.</td>
+            </tr>
         </tbody>
     </table>
 
-    <p class="referencia">Las filas resaltadas están en el stock mínimo o por debajo.</p>
+    <p class="paginacion" th:if="${pagina.totalPages > 1}">
+        <a th:if="${pagina.hasPrevious()}"
+           th:href="@{/stock(depositoId=${depositoId}, texto=${texto}, soloStockBajo=${soloStockBajo}, page=${pagina.number - 1})}">« Anterior</a>
+        <span th:text="|Página ${pagina.number + 1} de ${pagina.totalPages}|">Página 1 de 3</span>
+        <a th:if="${pagina.hasNext()}"
+           th:href="@{/stock(depositoId=${depositoId}, texto=${texto}, soloStockBajo=${soloStockBajo}, page=${pagina.number + 1})}">Siguiente »</a>
+    </p>
+
+    <p class="referencia">
+        <span th:text="|${pagina.totalElements} resultados.|">22 resultados.</span>
+        Las filas resaltadas están en el stock mínimo o por debajo.
+    </p>
 </body>
 </html>
