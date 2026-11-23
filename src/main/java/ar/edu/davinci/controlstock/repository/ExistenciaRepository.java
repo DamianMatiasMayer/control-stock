@@ -16,7 +16,8 @@ public interface ExistenciaRepository extends JpaRepository<Existencia, Long> {
             + "      OR LOWER(e.producto.nombre) LIKE LOWER(CONCAT('%', :texto, '%'))"
             + "      OR LOWER(e.producto.codigo) LIKE LOWER(CONCAT('%', :texto, '%')))"
             + " AND (:soloStockBajo = false OR e.cantidad <= e.stockMinimo)"
-            + " ORDER BY e.deposito.nombre, e.producto.nombre")
+            + " ORDER BY CASE WHEN e.cantidad <= e.stockMinimo THEN 0 ELSE 1 END,"
+            + "          e.deposito.nombre, e.producto.nombre")
     Page<Existencia> buscar(@Param("depositoId") Long depositoId,
                             @Param("texto") String texto,
                             @Param("soloStockBajo") boolean soloStockBajo,
