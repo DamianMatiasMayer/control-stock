@@ -28,7 +28,12 @@
 
         <div class="campo">
             <label for="motivo">Motivo</label>
-            <input type="text" id="motivo" th:field="*{motivo}" maxlength="200">
+            <select id="motivo" th:field="*{motivo}">
+                <option value="">Elegí un motivo</option>
+                <option th:each="opcion : ${motivos}"
+                        th:value="${opcion}"
+                        th:text="${opcion.descripcion}">Venta</option>
+            </select>
             <span class="error-campo" th:if="${#fields.hasErrors('motivo')}" th:errors="*{motivo}">Error</span>
         </div>
 

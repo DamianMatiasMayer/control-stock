@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ar.edu.davinci.controlstock.dto.MovimientoForm;
+import ar.edu.davinci.controlstock.entity.MotivoEgreso;
 import ar.edu.davinci.controlstock.entity.MovimientoStock;
 import ar.edu.davinci.controlstock.service.InventarioService;
 import ar.edu.davinci.controlstock.service.StockInsuficienteException;
@@ -29,7 +30,7 @@ public class EgresoController {
         form.setExistenciaId(existenciaId);
 
         model.addAttribute("movimientoForm", form);
-        model.addAttribute("existencia", inventarioService.buscarExistencia(existenciaId));
+        prepararFormulario(existenciaId, model);
         return "egreso";
     }
 
@@ -39,19 +40,25 @@ public class EgresoController {
                                   Model model) {
         // Errores de validación: vuelvo al formulario con los mensajes de cada campo
         if (resultado.hasErrors()) {
-            model.addAttribute("existencia", inventarioService.buscarExistencia(form.getExistenciaId()));
+            prepararFormulario(form.getExistenciaId(), model);
             return "egreso";
         }
 
         try {
             MovimientoStock movimiento = inventarioService.registrarEgreso(
-                    form.getExistenciaId(), form.getCantidad(), form.getMotivo());
+                    form.getExistenciaId(), form.getCantidad(), form.getMotivo().getDescripcion());
             return "redirect:/movimientos/" + movimiento.getId();
         } catch (StockInsuficienteException e) {
             // Error de negocio (RN1): vuelvo al formulario con el mensaje
             model.addAttribute("error", e.getMessage());
-            model.addAttribute("existencia", inventarioService.buscarExistencia(form.getExistenciaId()));
+            prepararFormulario(form.getExistenciaId(), model);
             return "egreso";
         }
+    }
+
+    // Los datos que necesita la pantalla del formulario, además del formulario en sí
+    private void prepararFormulario(Long existenciaId, Model model) {
+        model.addAttribute("existencia", inventarioService.buscarExistencia(existenciaId));
+        model.addAttribute("motivos", MotivoEgreso.values());
     }
 }

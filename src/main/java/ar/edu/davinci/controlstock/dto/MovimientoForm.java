@@ -1,9 +1,9 @@
 package ar.edu.davinci.controlstock.dto;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+
+import ar.edu.davinci.controlstock.entity.MotivoEgreso;
 
 public class MovimientoForm {
 
@@ -14,9 +14,8 @@ public class MovimientoForm {
     @Min(value = 1, message = "La cantidad debe ser mayor a 0")
     private Integer cantidad;
 
-    @NotBlank(message = "Ingresá el motivo")
-    @Size(max = 200, message = "El motivo puede tener hasta 200 caracteres")
-    private String motivo;
+    @NotNull(message = "Elegí el motivo")
+    private MotivoEgreso motivo;
 
     public Long getExistenciaId() {
         return existenciaId;
@@ -34,11 +33,11 @@ public class MovimientoForm {
         this.cantidad = cantidad;
     }
 
-    public String getMotivo() {
+    public MotivoEgreso getMotivo() {
         return motivo;
     }
 
-    public void setMotivo(String motivo) {
+    public void setMotivo(MotivoEgreso motivo) {
         this.motivo = motivo;
     }
 }
