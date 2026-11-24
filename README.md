@@ -13,8 +13,8 @@ Un comercio controla su stock a mano. Se vende más de lo que hay, no se sabe cu
 
 ### Implementado en el segundo parcial
 
-Caso de uso: Descripción 
-
+| Caso de uso | Descripción |
+|---|---|
 | CU9 | Consultar el stock por depósito, con filtros (depósito, producto, solo stock bajo) y paginación |
 | CU1 | Registrar un egreso, con validación en el servidor y reglas de negocio |
 | CU2 | Consultar el movimiento registrado y su alerta, si se generó |
@@ -42,16 +42,18 @@ Precios y facturación, compras a proveedores, varias empresas, y lotes o vencim
 
 ## Versiones utilizadas
 
-Herramienta y Versión 
-
+| Herramienta | Versión |
+|---|---|
 | Java | compilado para Java 17 (target), probado con JDK 25.0.2 |
-| Spring Boot | 4.0.9 |
+| Spring Boot | 4.0.9 (*) |
 | Hibernate ORM | 7.2.25 |
 | Base de datos | H2 2.4.240 |
 | Vistas | Thymeleaf, HTML y CSS (con un script JavaScript para los filtros) |
 | Validación | Jakarta Bean Validation |
 | Pruebas | JUnit 5 |
 | Construcción | Maven, mediante el Maven Wrapper |
+
+
 
 ## Cómo construir
 
@@ -100,8 +102,8 @@ Se usa **H2 en memoria**: la base se crea al arrancar la aplicación y se borra 
 
 **Consola web de H2**, para ver las tablas mientras la aplicación está levantada: http://localhost:8080/h2-console
 
-| Campo y Valor |
-
+| Campo | Valor |
+|---|---|
 | JDBC URL | `jdbc:h2:mem:stockdb` |
 | User Name | `sa` |
 | Password | *(vacío)* |
@@ -110,8 +112,8 @@ Se usa **H2 en memoria**: la base se crea al arrancar la aplicación y se borra 
 
 El archivo `src/main/resources/data.sql` carga **datos ficticios** automáticamente cada vez que arranca la aplicación:
 
-| Datos y Cantidad |
-
+| Datos | Cantidad |
+|---|---|
 | Categorías | 4 (Almacén, Limpieza, Bebidas, Perfumería) |
 | Depósitos | 3 (Central, Sucursal Norte, Sucursal Sur) |
 | Productos | 10 |
@@ -132,7 +134,7 @@ El archivo `src/main/resources/data.sql` carga **datos ficticios** automáticame
 Resultado esperado: **6 tests, 0 fallas, `BUILD SUCCESS`**.
 
 | Test | Tipo | Qué verifica |
-
+|---|---|---|
 | `egresoMenorAlStock_descuentaYGuardaElMovimiento` | Válido | Se descuenta la cantidad, se guarda el movimiento y no se genera alerta |
 | `egresoMayorAlStock_lanzaExcepcionYNoGuardaNada` | Inválido (RN1) | Se rechaza con `StockInsuficienteException` y no se guarda nada |
 | `egresoQueDejaElStockJustoEnElMinimo_generaUnaAlerta` | Límite (RN2) | Se genera la alerta, vinculada al movimiento |
@@ -169,14 +171,15 @@ src/main/resources/
 ├── data.sql      Datos de demostración
 └── messages.properties
 src/test/java/    Pruebas JUnit 5
+docs/             Definición del proyecto y diagramas
 ```
 
 **Arquitectura en capas:** Controller → Service → Repository → Entity. Las reglas de negocio están en `InventarioService`. El patrón **Observer** está implementado en código propio: `InventarioService` (Subject) notifica a la interfaz `ObservadorStock` (Observer), y `AlertaStockBajoObserver` (ConcreteObserver) crea la alerta.
 
 ## Problemas habituales
 
-| Problema y Solución |
-
+| Problema | Solución |
+|---|---|
 | `mvnw.cmd` no se reconoce en PowerShell | Escribirlo con `.\` adelante: `.\mvnw.cmd spring-boot:run` |
 | *"Port 8080 was already in use"* | Otro programa usa el puerto 8080, por ejemplo Tomcat de XAMPP. Detenerlo, o cerrar otra instancia de la aplicación que haya quedado abierta |
 | *"JAVA_HOME is not defined"* o *"java no se reconoce"* | Instalar un JDK 17 o superior y verificar con `java -version` |
